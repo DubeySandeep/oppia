@@ -1,0 +1,70 @@
+<div class="oppia-page-card">
+  <div class="about-nav md-tab">
+    <ul class="oppia-translation-tabs">
+      <li>
+        <a class="oppia-translation-tabs-text">Content</a>
+      </li>
+      <li>
+        <a class="oppia-translation-tabs-text">Feedbacks</a>
+      </li>
+      <li>
+        <a class="oppia-translation-tabs-text">Hints</a>
+      </li>
+      <li>
+        <a class="oppia-translation-tabs-text">Solution</a>
+      </li>
+    </ul>
+  </div>
+
+  <div >
+    <span>
+      <angular-html-bind html-data="stateContentService.savedMemento.getHtml()"
+                           class="oppia-rte-editor protractor-test-state-content-display">
+      </angular-html-bind>
+    </span>
+  </div>
+  <div >
+
+  </div>
+</div>
+
+<style>
+  .oppia-page-card {
+    background: rgb(255,255,255);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
+    margin-top: 40px;
+    padding: 30px 0px 30px 0px;
+    position: relative;
+    width: 80%;
+  }
+  .oppia-translation-tabs {
+    border-bottom: 1px solid #eee;
+    display: -webkit-flex;
+    display: flex;
+    margin-bottom: 0;
+    padding-left: 0px;
+    text-align: center;
+  }
+
+  .oppia-translation-tabs li {
+    display: -webkit-flex;
+    display: flex;
+    margin-bottom: 0;
+    width: -webkit-calc(100% / 4);
+    width: -moz-calc(100% / 4);
+    width: -o-calc(100% / 4);
+    width: calc(100% / 4);
+  }
+  .oppia-translation-tabs-text {
+    color: #009688;
+    border-bottom: none;
+    padding: 10px;
+    text-decoration: none;
+    width: 100%;
+  }
+
+</style>
+
