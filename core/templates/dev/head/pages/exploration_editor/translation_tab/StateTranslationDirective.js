@@ -25,12 +25,76 @@ oppia.directive('stateTranslation', [
         '/pages/exploration_editor/translation_tab/' +
         'state_translation_directive.html'),
       controller: [
-        '$scope', 'stateContentService', function($scope, stateContentService) {
+        '$scope', '$filter', 'ExplorationStatesService', 'EditorStateService',
+        function(
+            $scope, $filter, ExplorationStatesService, EditorStateService) {
+          $scope.TTrue = true;
+          // Define constants
+          $scope.TAB_ID_CONTENT = 'content';
+          $scope.TAB_ID_FEEDBACKS = 'feedbacks';
+          $scope.TAB_ID_HINTS = 'hints';
+          $scope.TAB_ID_SOLUTION = 'solution';
 
-          $scope.stateContentService = stateContentService;
-          $scope.$on('refreshTranslationTab', $scope.refreshTranslationTab);
-          $scope.refreshTranslationTab = function() {
-            // This will be used in future to intialize translation services.
+          $scope.ACTIVATED_TAB_ID = 'content';
+
+          $scope.activeHintIndex = null;
+          $scope.activeAnswerGroupIndex = null;
+
+          $scope.isActive = function(tabId) {
+            return ($scope.ACTIVATED_TAB_ID == tabId);
+          };
+
+          $scope.onTabClick = function(tabId) {
+            $scope.ACTIVATED_TAB_ID = tabId;
+            $scope.activeHintIndex = null;
+            $scope.activeAnswerGroupIndex = null;
+          };
+
+          $scope.changeActiveHintIndex = function(newIndex) {
+            if (newIndex === $scope.activeHintIndex) {
+              $scope.activeHintIndex = null;
+            } else {
+              $scope.activeHintIndex = newIndex;
+            }
+          };
+
+          $scope.changeActiveAnswerGroupIndex = function(newIndex) {
+            // If the current hint is being clicked on again, close it.
+            if (newIndex === $scope.activeAnswerGroupIndex) {
+              $scope.activeAnswerGroupIndex = null;
+            } else {
+              $scope.activeAnswerGroupIndex = newIndex;
+            }
+          };
+
+
+          $scope.getHtmlSummary = function(subtitledHtml) {
+            var htmlAsPlainText = $filter(
+              'formatRtePreview')(subtitledHtml.getHtml());
+            return htmlAsPlainText;
+          };
+
+          $scope.$on('refreshStateTranslation', function() {
+            $scope.initStateTranslation();
+          });
+          $scope.initStateTranslation = function() {
+            $scope.ACTIVATED_TAB_ID = 'content';
+
+            var stateName = EditorStateService.getActiveStateName();
+            $scope.stateContent = ExplorationStatesService
+              .getStateContentMemento(stateName);
+            $scope.stateSolution = ExplorationStatesService
+              .getSolutionMemento(stateName);
+            $scope.stateHints = ExplorationStatesService
+              .getHintsMemento(stateName);
+            $scope.stateAnswerGroups = ExplorationStatesService
+              .getInteractionAnswerGroupsMemento(stateName);
+            $scope.stateDefaultOutcome = ExplorationStatesService
+              .getInteractionDefaultOutcomeMemento(stateName);
+            $scope.stateInteractionId = ExplorationStatesService
+              .getInteractionIdMemento(stateName);
+            $scope.activeHintIndex = null;
+            $scope.activeAnswerGroupIndex = null;
           };
         }
       ]
