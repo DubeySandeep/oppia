@@ -1,34 +1,33 @@
-<div class="oppia-page-card">
-  <div class="about-nav md-tab">
+<div class="oppia-page-card oppia-state-translation-page">
+  <div class="tarnslation-nav md-tab">
     <ul class="oppia-translation-tabs">
-      <li ng-class="{'active-tab': isActive(TAB_ID_CONTENT)}">
+      <li ng-class="{'oppia-active-translation-tab': isActive(TAB_ID_CONTENT)}">
         <a ng-click="onTabClick(TAB_ID_CONTENT)" href="" class="oppia-translation-tabs-text">Content</a>
       </li>
-      <li ng-class="{'active-tab': isActive(TAB_ID_FEEDBACKS)}">
-        <a ng-click="onTabClick(TAB_ID_FEEDBACKS)"  href="" class="oppia-translation-tabs-text">Feedbacks</a>
+      <li ng-class="{'oppia-active-translation-tab': isActive(TAB_ID_FEEDBACK), 'oppia-disabled-translation-tab': isDisabled(TAB_ID_FEEDBACK)}">
+        <a ng-click="onTabClick(TAB_ID_FEEDBACK)" href="" class="oppia-translation-tabs-text">Feedback</a>
       </li>
-      <li ng-class="{'active-tab': isActive(TAB_ID_HINTS)}">
+      <li ng-class="{'oppia-active-translation-tab': isActive(TAB_ID_HINTS), 'oppia-disabled-translation-tab': isDisabled(TAB_ID_HINTS)}">
         <a ng-click="onTabClick(TAB_ID_HINTS)" href="" class="oppia-translation-tabs-text">Hints</a>
       </li>
-      <li ng-class="{'active-tab': isActive(TAB_ID_SOLUTION)}">
+      <li ng-class="{'oppia-active-translation-tab': isActive(TAB_ID_SOLUTION), 'oppia-disabled-translation-tab': isDisabled(TAB_ID_SOLUTION)}">
         <a ng-click="onTabClick(TAB_ID_SOLUTION)" href="" class="oppia-translation-tabs-text">Solution</a>
       </li>
     </ul>
   </div>
 
   <div class="translation-state-contents">
-    <div ng-show="isActive(TAB_ID_CONTENT)" class="content translation-state-content">
+    <div ng-show="isActive(TAB_ID_CONTENT)" class="translation-state-content">
       <span>
-        <angular-html-bind html-data="stateContent.getHtml()"
-                             class="oppia-rte-editor protractor-test-state-content-display">
+        <angular-html-bind html-data="stateContent.getHtml()" class="oppia-rte-editor">
         </angular-html-bind>
       </span>
     </div>
-    <div ng-show="isActive(TAB_ID_FEEDBACKS)" class="feedbacks translation-state-content">
+    <div ng-show="isActive(TAB_ID_FEEDBACK)" class="translation-state-content">
       <div>
         <ul class="nav oppia-option-list nav-stacked nav-pills" role="tablist">
           <li ng-repeat="answerGroup in stateAnswerGroups track by $index" ng-class="{'active': activeAnswerGroupIndex === $index}" class="oppia-rule-block oppia-prevent-selection" style="margin-top: 0;">
-            <a ng-click="changeActiveAnswerGroupIndex($index)" class="oppia-rule-tab protractor-test-response-tab" ng-class="{'oppia-rule-tab-active': activeAnswerGroupIndex === $index}">
+            <a ng-click="changeActiveAnswerGroupIndex($index)" class="oppia-rule-tab" ng-class="{'oppia-rule-tab-active': activeAnswerGroupIndex === $index}">
               <response-header index="$index"
                                summary="answerGroup | summarizeAnswerGroup : stateInteractionId:getAnswerChoices():false"
                                short-summary="answerGroup | summarizeAnswerGroup : stateInteractionId:getAnswerChoices():true"
@@ -40,9 +39,8 @@
             </a>
             <div ng-if="activeAnswerGroupIndex === $index">
               <div class="oppia-editor-card-section">
-                <div class="oppia-rule-body-container protractor-test-response-body-<[$index]>">
-                  <angular-html-bind html-data="answerGroup.outcome.feedback.getHtml()"
-                             class="oppia-rte-editor protractor-test-state-content-display">
+                <div class="oppia-rule-body-container">
+                  <angular-html-bind html-data="answerGroup.outcome.feedback.getHtml()" class="oppia-rte-editor">
                   </angular-html-bind>
                 </div>
               </div>
@@ -55,7 +53,7 @@
       <div>
         <ul class="nav oppia-option-list nav-stacked nav-pills" role="tablist">
           <li ng-class="{'active': activeAnswerGroupIndex === stateAnswerGroups.length}" class="oppia-rule-block">
-            <a ng-click="changeActiveAnswerGroupIndex(stateAnswerGroups.length)" class="oppia-rule-tab oppia-default-rule-tab protractor-test-default-response-tab" ng-class="{'oppia-rule-tab-active': activeAnswerGroupIndex == stateAnswerGroups.length}">
+            <a ng-click="changeActiveAnswerGroupIndex(stateAnswerGroups.length)" class="oppia-rule-tab oppia-default-rule-tab" ng-class="{'oppia-rule-tab-active': activeAnswerGroupIndex == stateAnswerGroups.length}">
               <response-header index="$index"
                                is-active="$index === activeAnswerGroupIndex"
                                summary="stateDefaultOutcome|summarizeDefaultOutcome:stateInteractionId:stateDefaultOutcome.length:false"
@@ -66,9 +64,8 @@
             </a>
             <div ng-if="activeAnswerGroupIndex === stateAnswerGroups.length">
               <div class="oppia-editor-card-section">
-                <div class="oppia-rule-body-container protractor-test-response-body-default">
-                  <angular-html-bind html-data="stateDefaultOutcome.feedback.getHtml()"
-                             class="oppia-rte-editor protractor-test-state-content-display">
+                <div class="oppia-rule-body-container">
+                  <angular-html-bind html-data="stateDefaultOutcome.feedback.getHtml()" class="oppia-rte-editor">
                   </angular-html-bind>
                 </div>
               </div>
@@ -77,14 +74,14 @@
         </ul>
       </div>
     </div>
-    <div ng-show="isActive(TAB_ID_HINTS)" class="hints translation-state-content">
+    <div ng-show="isActive(TAB_ID_HINTS)" class="translation-state-content">
       <ul class="nav oppia-option-list nav-stacked nav-pills" role="tablist">
         <li ng-repeat="hint in stateHints track by $index"
             ng-class="{'active': activeHintIndex === $index}"
             class="oppia-rule-block oppia-prevent-selection"
             style="margin-top: 0;">
           <a ng-click="changeActiveHintIndex($index)"
-             class="oppia-rule-tab protractor-test-hint-tab"
+             class="oppia-rule-tab"
              ng-class="{'oppia-rule-tab-active': activeHintIndex === $index}">
             <response-header index="$index"
                              summary="getHtmlSummary(hint.hintContent)"
@@ -93,9 +90,8 @@
             </response-header>
           </a>
           <div ng-if="activeHintIndex === $index">
-            <div class="oppia-editor-card-section protractor-test-hint-body-<[$index]>">
-              <angular-html-bind html-data="hint.hintContent.getHtml()"
-                             class="oppia-rte-editor protractor-test-state-content-display">
+            <div class="oppia-editor-card-section">
+              <angular-html-bind html-data="hint.hintContent.getHtml()" class="oppia-rte-editor">
               </angular-html-bind>
             </div>
           </div>
@@ -103,10 +99,9 @@
       </ul>
     </div>
 
-    <div ng-show="isActive(TAB_ID_SOLUTION)" class="solution translation-state-content">
+    <div ng-show="isActive(TAB_ID_SOLUTION)" class="translation-state-content">
       <span>
-        <angular-html-bind html-data="stateSolution.explanation.getHtml()"
-                             class="oppia-rte-editor protractor-test-state-content-display">
+        <angular-html-bind html-data="stateSolution.explanation.getHtml()" class="oppia-rte-editor">
         </angular-html-bind>
       </span>
     </div>
@@ -117,15 +112,8 @@
 </div>
 
 <style>
-  .oppia-page-card {
-    background: rgb(255,255,255);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 80px;
-    margin-top: 40px;
+  .oppia-state-translation-page {
     padding: 10px 0px 10px 0px;
-    position: relative;
     width: 80%;
     height: 500px;
   }
@@ -148,10 +136,16 @@
     width: calc(100% / 4);
   }
 
-  .active-tab a {
+  .oppia-active-translation-tab a {
     color: #009688;
     border-bottom: 2px solid #009688;
     text-decoration: none;
+  }
+
+  .oppia-disabled-translation-tab a {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #ccc;
   }
 
   .oppia-translation-tabs-text {
@@ -162,7 +156,7 @@
     width: 100%;
   }
 
-  .oppia-translation-tabs-text:focus {
+  .oppia-translation-tabs-text:hover {
     color: #009688;
     border-bottom: 2px solid #009688;
   }
@@ -176,8 +170,7 @@
     }
 
   .translation-state-content {
-    padding: 20px 30px 20px 30px;
+    padding: 20px 30+px 20px 30px;
     margin: auto;
   }
 </style>
-

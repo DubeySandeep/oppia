@@ -1,4 +1,4 @@
-// Copyright 2014 The Oppia Authors. All Rights Reserved.
+// Copyright 2018 The Oppia Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * @fileoverview Directive for the translation tab.
+ * @fileoverview Directive for the state translation.
  */
 
 oppia.directive('stateTranslation', [
@@ -29,16 +29,22 @@ oppia.directive('stateTranslation', [
         function(
             $scope, $filter, ExplorationStatesService, EditorStateService) {
           $scope.TTrue = true;
-          // Define constants
+          // Define tab constants.
           $scope.TAB_ID_CONTENT = 'content';
-          $scope.TAB_ID_FEEDBACKS = 'feedbacks';
+          $scope.TAB_ID_FEEDBACK = 'feedback';
           $scope.TAB_ID_HINTS = 'hints';
           $scope.TAB_ID_SOLUTION = 'solution';
 
-          $scope.ACTIVATED_TAB_ID = 'content';
+          // Activates Content tab by default.
+          $scope.ACTIVATED_TAB_ID = $scope.TAB_ID_CONTENT;
 
           $scope.activeHintIndex = null;
           $scope.activeAnswerGroupIndex = null;
+          $scope.stateContent = null;
+          $scope.stateAnswerGroups = [];
+          $scope.stateDefaultOutcome = null;
+          $scope.stateHints = [];
+          $scope.stateSolution = null;
 
           $scope.isActive = function(tabId) {
             return ($scope.ACTIVATED_TAB_ID == tabId);
@@ -50,7 +56,30 @@ oppia.directive('stateTranslation', [
             $scope.activeAnswerGroupIndex = null;
           };
 
+          $scope.isDisabled = function(tabId) {
+            if (tabId === $scope.TAB_ID_FEEDBACK) {
+              if (!$scope.stateDefaultOutcome) {
+                return true;
+              } else {
+                return false;
+              }
+            } else if (tabId === $scope.TAB_ID_HINTS) {
+              if ($scope.stateHints.length <= 0) {
+                return true;
+              } else {
+                return false;
+              }
+            } else {
+              if (!$scope.stateSolution) {
+                return true;
+              } else {
+                return false;
+              }
+            }
+          };
+
           $scope.changeActiveHintIndex = function(newIndex) {
+            // If the current hint is being clicked on again, close it.
             if (newIndex === $scope.activeHintIndex) {
               $scope.activeHintIndex = null;
             } else {
@@ -59,7 +88,7 @@ oppia.directive('stateTranslation', [
           };
 
           $scope.changeActiveAnswerGroupIndex = function(newIndex) {
-            // If the current hint is being clicked on again, close it.
+            // If the current answer group is being clicked on again, close it.
             if (newIndex === $scope.activeAnswerGroupIndex) {
               $scope.activeAnswerGroupIndex = null;
             } else {
@@ -78,7 +107,7 @@ oppia.directive('stateTranslation', [
             $scope.initStateTranslation();
           });
           $scope.initStateTranslation = function() {
-            $scope.ACTIVATED_TAB_ID = 'content';
+            $scope.ACTIVATED_TAB_ID = $scope.TAB_ID_CONTENT;
 
             var stateName = EditorStateService.getActiveStateName();
             $scope.stateContent = ExplorationStatesService
