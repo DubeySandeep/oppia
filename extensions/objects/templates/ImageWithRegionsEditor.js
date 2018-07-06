@@ -168,7 +168,7 @@ oppia.directive('imageWithRegionsEditor', [
             if (newVal !== '') {
               // Loads the image in hanging <img> tag so as to get the
               // width and height.
-              $('<img/>').attr('src', $scope.getPreviewUrl(newVal.name)).on(
+              $('<img/>').attr('src', $scope.getPreviewUrl(newVal)).on(
                 'load', function() {
                   $scope.originalImageWidth = this.width;
                   $scope.originalImageHeight = this.height;
@@ -490,7 +490,9 @@ oppia.directive('imageWithRegionsEditor', [
           };
           $scope.resetEditor = function() {
             $uibModal.open({
-              templateUrl: 'modals/imageRegionsResetConfirmation',
+              templateUrl: UrlInterpolationService.getExtensionResourceUrl(
+                '/objects/templates/' +
+                'image_with_regions_reset_confirmation_directive.html'),
               backdrop: 'static',
               keyboard: false,
               controller: [
