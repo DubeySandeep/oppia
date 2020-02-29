@@ -261,9 +261,12 @@ def build_js_files(dev_mode_setting):
         try:
             webpack_process = subprocess.Popen([
                 common.NODE_BIN_PATH, WEBPACK_BIN_PATH, '--config',
-                'webpack.dev.config.ts'])
+                'webpack.dev.config.ts'], stderr=subprocess.PIPE)
             # Wait for webpack compilation to complete.
-            webpack_process.wait()
+            _, stderr = webpack_process.communicate()
+            if not stderr == '':
+                python_utils.PRINT(error.output)
+                sys.exit(error.returncode)
         except OSError as error:
             python_utils.PRINT(error.output)
             sys.exit(error.returncode)
