@@ -19,6 +19,7 @@
 
 var general = require('../protractor_utils/general.js');
 var users = require('../protractor_utils/users.js');
+var workflow = require('../protractor_utils/workflow.js');
 
 var AdminPage = require('../protractor_utils/AdminPage.js');
 var ClassroomPage = require('../protractor_utils/ClassroomPage.js');

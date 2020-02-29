@@ -274,6 +274,7 @@ var _writeScreenShot = function(data, testName) {
     var stream = fs.createWriteStream(filename);
     stream.write(new Buffer.from(data, 'base64'));
     stream.end();
+    console.log("Screenshot", filename);
   }, function() {});
 };
 
