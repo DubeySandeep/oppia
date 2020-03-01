@@ -259,14 +259,9 @@ def build_js_files(dev_mode_setting):
             with python_utils.open_file(HASHES_FILE_PATH, 'w') as hash_file:
                 hash_file.write('{}')
         try:
-            webpack_process = subprocess.Popen([
+            subprocess.check_call([
                 common.NODE_BIN_PATH, WEBPACK_BIN_PATH, '--config',
                 'webpack.dev.config.ts'], stderr=subprocess.PIPE)
-            # Wait for webpack compilation to complete.
-            _, stderr = webpack_process.communicate()
-            if not stderr == '':
-                python_utils.PRINT(error.output)
-                sys.exit(error.returncode)
         except OSError as error:
             python_utils.PRINT(error.output)
             sys.exit(error.returncode)
