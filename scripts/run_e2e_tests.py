@@ -251,18 +251,21 @@ def build_js_files(dev_mode_setting):
         in dev mode.
     """
     update_dev_mode_in_constants_js(CONSTANT_FILE_PATH, dev_mode_setting)
-    build.main(args=(['--prod_env'] if not dev_mode_setting else []))
     if not dev_mode_setting:
         python_utils.PRINT('  Generating files for production mode...')
+        build.main(args=['--prod_env'])
     else:
         # The 'hashes.json' file is used by the `url-interpolation` service.
         if not os.path.isfile(HASHES_FILE_PATH):
             with python_utils.open_file(HASHES_FILE_PATH, 'w') as hash_file:
                 hash_file.write('{}')
+        python_utils.PRINT('Generating files for dev mode...')
+        build.main(args=[])
         try:
+            python_utils.PRINT('Compiling webpack...')
             subprocess.check_call([
                 common.NODE_BIN_PATH, WEBPACK_BIN_PATH, '--config',
-                'webpack.dev.config.ts'], stderr=subprocess.PIPE)
+                'webpack.dev.config.ts'])
         except OSError as error:
             python_utils.PRINT(error.output)
             sys.exit(error.returncode)
