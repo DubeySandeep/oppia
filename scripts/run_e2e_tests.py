@@ -251,6 +251,7 @@ def build_js_files(dev_mode_setting):
         in dev mode.
     """
     update_dev_mode_in_constants_js(CONSTANT_FILE_PATH, dev_mode_setting)
+    build.main(args=(['--prod_env'] if not dev_mode_setting else []))
     if not dev_mode_setting:
         python_utils.PRINT('  Generating files for production mode...')
     else:
@@ -265,7 +266,6 @@ def build_js_files(dev_mode_setting):
         except OSError as error:
             python_utils.PRINT(error.output)
             sys.exit(error.returncode)
-    build.main(args=(['--prod_env'] if not dev_mode_setting else []))
 
 
 @contextlib.contextmanager
