@@ -257,6 +257,7 @@ var AdminPage = function() {
         texts.forEach(function(name) {
           foundUsersArray.push(name);
         });
+        console.log(foundUsersArray, expectedUsernamesArray);
         expect(foundUsersArray.length).toEqual(expectedUsernamesArray.length);
 
         expectedUsernamesArray.sort();

@@ -27,7 +27,7 @@ describe('Admin Page', function() {
     adminPage = new AdminPage.AdminPage();
   });
 
-  it('should allow assigning roles and show them', function() {
+  fit('should allow assigning roles and show them', function() {
     users.createUser('moderator1@adminTab.com', 'moderator1');
     users.createUser('moderator2@adminTab.com', 'moderator2');
     users.createUser('collectionEdtior1@adminTab.com', 'collectionEditor1');
