@@ -21,12 +21,14 @@ export class CommunityDashboardConstants {
     myContributionTab: {
       ariaLabel: 'Check your contributions.',
       tabName: 'My contribution',
+      tabIcon: 'account_circle',
       description: '',
       customizationOptions: []
     },
     submitQuestionTab: {
       ariaLabel: 'See opportunities for adding new questions.',
       tabName: 'Submit Question',
+      tabIcon: 'note_add',
       description: 'Submit a question for students to answer while ' +
         'practicing that skill.',
       customizationOptions: ['sort']
@@ -34,6 +36,7 @@ export class CommunityDashboardConstants {
     translateTextTab: {
       ariaLabel: 'See opportunities for translation.',
       tabName: 'Translate Text',
+      tabIcon: 'translate',
       description: 'Translate the lesson text to help non-English speakers ' +
         'follow the lessons.',
       customizationOptions: ['language', 'sort']

@@ -752,7 +752,9 @@ tags: []
         # https://github.com/Pylons/webtest/blob/
         # bf77326420b628c9ea5431432c7e171f88c5d874/webtest/app.py#L1119 .
         self.assertEqual(json_response.status_int, expected_status_int)
-        return self._parse_json_response(json_response, expect_errors)
+        response = self._parse_json_response(json_response, expect_errors)
+        self.assertTrue(isinstance(response), dict)
+        return response
 
     def post_json(self, url, payload, csrf_token=None,
                   expected_status_int=200, upload_files=None):
