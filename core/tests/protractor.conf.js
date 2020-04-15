@@ -41,40 +41,31 @@ var suites = {
       'protractor_desktop/collections.js'
     ],
 
-    communityDashboard: [
-      'protractor_desktop/communityDashboard.js'
+    group6: [
+      'protractor_desktop/communityDashboard.js',
+      'protractor_desktop/creatorDashboard.js',
+      'protractor_desktop/topicsAndSkillsDashboard.js',
+      'protractor_desktop/learnerDashboard.js'
     ],
 
     coreEditorAndPlayerFeatures: [
       'protractor_desktop/coreEditorAndPlayerFeatures.js'
     ],
 
-    creatorDashboard: [
-      'protractor_desktop/creatorDashboard.js'
-    ],
-
     embedding: [
       'protractor_desktop/embedding.js'
     ],
 
-    explorationFeedbackTab: [
-      'protractor_desktop/explorationFeedbackTab.js'
+    group5: [
+      'protractor_desktop/explorationHistoryTab.js',
+      'protractor_desktop/explorationTranslationTab.js',
+      'protractor_desktop/explorationFeedbackTab.js',
+      'protractor_desktop/publicationAndLibrary.js'
     ],
 
-    explorationHistoryTab: [
-      'protractor_desktop/explorationHistoryTab.js'
-    ],
-
-    explorationImprovementsTab: [
-      'protractor_desktop/explorationImprovementsTab.js'
-    ],
-
-    explorationStatisticsTab: [
+    group4: [
+      'protractor_desktop/explorationImprovementsTab.js',
       'protractor_desktop/explorationStatisticsTab.js'
-    ],
-
-    explorationTranslationTab: [
-      'protractor_desktop/explorationTranslationTab.js'
     ],
 
     extensions: [
@@ -85,14 +76,6 @@ var suites = {
       'protractor_desktop/voiceoverUploadFeatures.js'
     ],
 
-    learnerDashboard: [
-      'protractor_desktop/learnerDashboard.js'
-    ],
-
-    learner: [
-      'protractor/learnerFlow.js'
-    ],
-
     library: [
       'protractor/libraryFlow.js'
     ],
@@ -101,45 +84,23 @@ var suites = {
       'protractor_desktop/navigation.js'
     ],
 
-    preferences: [
-      'protractor_desktop/preferences.js'
+    group7: [
+      'protractor/learnerFlow.js',
+      'protractor_desktop/preferences.js',
+      'protractor_desktop/profileFeatures.js',
+      'protractor_desktop/userJourneys.js'
     ],
 
-    profileFeatures: [
-      'protractor_desktop/profileFeatures.js'
-    ],
-
-    profileMenu: [
-      'protractor/profileMenuFlow.js'
-    ],
-
-    publication: [
-      'protractor_desktop/publicationAndLibrary.js'
-    ],
-
-    subscriptions: [
-      'protractor/subscriptionsFlow.js'
-    ],
-
-    topicAndStoryEditor: [
+    group8: [
+      'protractor/profileMenuFlow.js',
+      'protractor_desktop/skillEditor.js',
+      'protractor/subscriptionsFlow.js',
       'protractor_desktop/topicAndStoryEditor.js'
     ],
 
     topicAndStoryEditorFileUploadFeatures: [
       'protractor_desktop/topicAndStoryEditorFileUploadFeatures.js'
-    ],
-
-    topicsAndSkillsDashboard: [
-      'protractor_desktop/topicsAndSkillsDashboard.js'
-    ],
-
-    skillEditor: [
-      'protractor_desktop/skillEditor.js'
-    ],
-
-    users: [
-      'protractor_desktop/userJourneys.js',
-    ],
+    ]
   };
 
 // A reference configuration file.
