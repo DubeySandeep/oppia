@@ -457,8 +457,14 @@ def main(args=None):
     commands.extend(get_e2e_test_parameters(
         parsed_args.sharding_instances, parsed_args.suite, dev_mode))
 
-    p = subprocess.Popen(commands)
-    p.communicate()
+    returncode = -1
+    attempt = 1
+    while returncode != 0 and attempt <= 3:
+        python_utils.PRINT('Attempt: %s' % attempt)
+        attempt += 1
+        p = subprocess.Popen(commands)
+        p.communicate()
+        returncode = p.returncode
     sys.exit(p.returncode)
 
 
