@@ -42,10 +42,7 @@ var suites = {
     ],
 
     group6: [
-      'protractor_desktop/communityDashboard.js',
-      'protractor_desktop/creatorDashboard.js',
-      'protractor_desktop/topicsAndSkillsDashboard.js',
-      'protractor_desktop/learnerDashboard.js'
+      'protractor_desktop/communityDashboard.js'
     ],
 
     coreEditorAndPlayerFeatures: [
@@ -57,15 +54,11 @@ var suites = {
     ],
 
     group5: [
-      'protractor_desktop/explorationHistoryTab.js',
-      'protractor_desktop/explorationTranslationTab.js',
-      'protractor_desktop/explorationFeedbackTab.js',
-      'protractor_desktop/publicationAndLibrary.js'
+      'protractor_desktop/explorationHistoryTab.js'
     ],
 
     group4: [
-      'protractor_desktop/explorationImprovementsTab.js',
-      'protractor_desktop/explorationStatisticsTab.js'
+      'protractor_desktop/explorationImprovementsTab.js'
     ],
 
     extensions: [
@@ -85,17 +78,11 @@ var suites = {
     ],
 
     group7: [
-      'protractor/learnerFlow.js',
-      'protractor_desktop/preferences.js',
-      'protractor_desktop/profileFeatures.js',
-      'protractor_desktop/userJourneys.js'
+      'protractor/learnerFlow.js'
     ],
 
     group8: [
-      'protractor/profileMenuFlow.js',
-      'protractor_desktop/skillEditor.js',
-      'protractor/subscriptionsFlow.js',
-      'protractor_desktop/topicAndStoryEditor.js'
+      'protractor/profileMenuFlow.js'
     ],
 
     topicAndStoryEditorFileUploadFeatures: [
