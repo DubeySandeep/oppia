@@ -52,80 +52,79 @@ workflows:
           requires:
             - e2e_navigation
       - e2e_library:
-        - requires:
+        requires:
             - e2e_navigation
-
       - e2e_creators_dashboard:
-          - requires:
+          requires:
               - e2e_navigation
       - e2e_community_dashboard:
-          - requires:
+          requires:
               - e2e_admin
       - e2e_exploration_translation_tab:
-          - requires:
+          requires:
               - e2e_creators_dashboard
       - e2e_exploration_feeback_tab:
-          - requires:
+          requires:
               - e2e_creators_dashboard
       - e2e_exploration_history_tab:
-          - requires:
+          requires:
               - e2e_creators_dashboard
       - e2e_exploration_improvments_tab:
-          - requires:
+          requires:
               - e2e_creators_dashboard
       - e2e_exploration_statistics_tab:
-          - requires:
+          requires:
               - e2e_creators_dashboard
       - e2e_core_editor_and_player_features:
-          - requires:
+          requires:
               - e2e_creators_dashboard
       - e2e_additional_editor_features:
-          - requires:
+          requires:
               - e2e_core_editor_and_player_features
       - e2e_additional_player_features:
-          - requires:
+          requires:
               - e2e_core_editor_and_player_features
       - e2e_collections:
-          - requires:
+          requires:
               - e2e_creators_dashboard
       - e2e_extensions:
-          - requires:
+          requires:
               - e2e_navigation
       - e2e_users:
-          - requires:
+          requires:
               - e2e_navigation
       - e2e_subscriptions:
-          - requires:
+          requires:
               - e2e_users
       - e2e_profile_menu:
-          - requires:
+          requires:
               - e2e_users
       - e2e_preferences:
-          - requires:
+          requires:
               - e2e_users
       - e2e_profile_features:
-          - requires:
+          requires:
               - e2e_users
       - e2e_topics_and_skills_dashboard:
-          - requires:
+          requires:
               - e2e_navigation
       - e2e_topic_and_story_editor:
-          - requires:
+          requires:
               - e2e_topics_and_skills_dashboard
       - e2e_classroom_page:
-          - requires:
+          requires:
               - e2e_topic_and_story_editor
       - e2e_skill_editor:
-          - requires:
+          requires:
               - e2e_topics_and_skills_dashboard
       - e2e_learner_dashboard:
-          - requires:
+          requires:
               - e2e_navigation
       - e2e_learner:
-          - requires:
+          requires:
               - e2e_learner_dashboard
       - e2e_publication:
-          - requires:
+          requires:
               - e2e_navigation
 
 var_for_docker_image: &docker_image circleci/python:2.7.17-browsers
