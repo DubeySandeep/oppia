@@ -443,28 +443,32 @@ def main(args=None):
     if not parsed_args.skip_build:
         build_js_files(
             dev_mode, deparallelize_terser=parsed_args.deparallelize_terser)
-    start_webdriver_manager()
-
-    start_google_app_engine_server(dev_mode)
-
-    wait_for_port_to_be_open(WEB_DRIVER_PORT)
-    wait_for_port_to_be_open(GOOGLE_APP_ENGINE_PORT)
-    ensure_screenshots_dir_is_removed()
-    commands = [common.NODE_BIN_PATH]
-    if parsed_args.debug_mode:
-        commands.append('--inspect-brk')
-    commands.append(PROTRACTOR_BIN_PATH)
-    commands.extend(get_e2e_test_parameters(
-        parsed_args.sharding_instances, parsed_args.suite, dev_mode))
 
     returncode = -1
     attempt = 1
     while returncode != 0 and attempt <= 3:
         python_utils.PRINT('Attempt: %s' % attempt)
+
+        start_webdriver_manager()
+
+        start_google_app_engine_server(dev_mode)
+
+        wait_for_port_to_be_open(WEB_DRIVER_PORT)
+        wait_for_port_to_be_open(GOOGLE_APP_ENGINE_PORT)
+        ensure_screenshots_dir_is_removed()
+        commands = [common.NODE_BIN_PATH]
+        if parsed_args.debug_mode:
+            commands.append('--inspect-brk')
+        commands.append(PROTRACTOR_BIN_PATH)
+        commands.extend(get_e2e_test_parameters(
+            parsed_args.sharding_instances, parsed_args.suite, dev_mode))
+
         attempt += 1
         p = subprocess.Popen(commands)
         p.communicate()
         returncode = p.returncode
+        if returncode != 0:
+            cleanup()
     sys.exit(p.returncode)
 
 
