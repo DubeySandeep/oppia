@@ -381,7 +381,9 @@ class GeneralFeedbackMessageModel(base_models.BaseModel):
             given thread, up to a maximum of feconf.DEFAULT_QUERY_LIMIT
             messages.
         """
-        return cls.get_all().filter(
+        context = ndb.get_context()
+        context.clear_cache()
+        return cls.query(
             cls.thread_id == thread_id).fetch(feconf.DEFAULT_QUERY_LIMIT)
 
     @classmethod

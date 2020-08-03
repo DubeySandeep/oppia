@@ -104,6 +104,11 @@ class ThreadHandler(base.BaseHandler):
         suggestion = suggestion_services.get_suggestion_by_id(thread_id)
         text = self.payload.get('text')
         updated_status = self.payload.get('updated_status')
+        print "Received:"
+        print "Text: ", text
+        print "Initial messages:", [
+            m.to_dict() for m in feedback_services.get_messages(thread_id)]
+        print "END"
         if not text and not updated_status:
             raise self.InvalidInputException(
                 'Text for the message must be specified.')
@@ -117,6 +122,7 @@ class ThreadHandler(base.BaseHandler):
         messages = [m.to_dict() for m in feedback_services.get_messages(
             thread_id)]
 
+        print "Final messages: ", messages
         self.render_json({
             'messages': messages
         })
