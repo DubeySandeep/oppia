@@ -175,7 +175,7 @@ class TestingTaskSpec:
         test_target_flag = '--test_target=%s' % self.test_target
         if self.generate_coverage_report:
             exc_list = [
-                sys.executable, COVERAGE_MODULE_PATH, 'run',
+                sys.executable, COVERAGE_MODULE_PATH, 'run', '--branch',
                 TEST_RUNNER_PATH, test_target_flag
             ]
             rand = random.Random(os.urandom(8)).randint(0, 999999)
