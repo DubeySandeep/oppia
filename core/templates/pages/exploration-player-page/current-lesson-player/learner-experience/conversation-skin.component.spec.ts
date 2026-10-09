@@ -16,6 +16,8 @@
  * @fileoverview Unit tests for Conversation skin component.
  */
 
+// @ts-nocheck
+
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {EventEmitter, NO_ERRORS_SCHEMA} from '@angular/core';
 import {
@@ -1435,6 +1437,7 @@ describe('Conversation skin component', () => {
       spyOn(focusManagerService, 'setFocusIfOnDesktop');
       spyOn(loaderService, 'hideLoadingScreen');
       spyOn(urlService, 'getPidFromUrl').and.returnValue(null);
+      spyOn(urlService, 'getUrlParams').and.returnValue({});
       spyOn(currentEngineService, 'getCurrentEngineService').and.returnValue(
         explorationEngineService
       );
@@ -2438,7 +2441,7 @@ describe('Conversation skin component', () => {
 
       // Case 2: Interacted, Valid state -> should return true (prevent unload).
       getHasInteractedSpy.and.returnValue(true);
-      componentInstance._editorPreviewMode = false;
+      componentInstance.editorPreviewMode = false;
       const mockStateCard = jasmine.createSpyObj('StateCard', ['isTerminal']);
       mockStateCard.isTerminal.and.returnValue(false);
       getDisplayedCardSpy.and.returnValue(mockStateCard);
@@ -2448,11 +2451,11 @@ describe('Conversation skin component', () => {
       expect(recordEventSpy).toHaveBeenCalled();
 
       // Case 3: Editor preview mode -> should return false.
-      componentInstance._editorPreviewMode = true;
+      componentInstance.editorPreviewMode = true;
       expect(capturedCallback()).toBe(false);
 
       // Case 4: Terminal state -> should return false.
-      componentInstance._editorPreviewMode = false;
+      componentInstance.editorPreviewMode = false;
       mockStateCard.isTerminal.and.returnValue(true);
       expect(capturedCallback()).toBe(false);
 

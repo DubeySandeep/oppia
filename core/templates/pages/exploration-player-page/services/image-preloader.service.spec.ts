@@ -431,6 +431,7 @@ describe('Image preloader service', () => {
   });
 
   it('should not be in exploration player before init is called', () => {
+    flushFeatureFlagsIfQueued();
     expect(imagePreloaderService.inExplorationPlayer()).toBeFalsy();
   });
 

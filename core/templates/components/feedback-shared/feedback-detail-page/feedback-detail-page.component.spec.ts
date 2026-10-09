@@ -545,4 +545,64 @@ describe('FeedbackDetailPageComponent', () => {
     fixture.detectChanges();
     expect(component.getGithubIssueUrl()).toBe('');
   });
+
+  it('should return null string for getParentFeedbackUrl if detailResponse is PlatformfeedbackDetailresponse', () => {
+    expect(
+      component.getParentFeedbackUrl(mockPlatformFeedbackDetailResponse)
+    ).toBe(null);
+  });
+
+  it('should return null for getParentFeedbackUrl if parent_feedback_id is missing', () => {
+    const lessonFeedback = {
+      ...mockLessonFeedbackDetailresponse,
+      parent_feedback_id: null,
+    };
+
+    expect(component.getParentFeedbackUrl(lessonFeedback)).toBe(null);
+  });
+
+  it('should construct the parent feedback URL for lesson feedback', () => {
+    const lessonFeedback = {
+      ...mockLessonFeedbackDetailresponse,
+      parent_feedback_id: 'parent1',
+      lesson_metadata: {
+        ...mockLessonMetadata,
+        exploration_id: 'exp1',
+      },
+    };
+
+    expect(component.getParentFeedbackUrl(lessonFeedback)).toBe(
+      '/create/exp1#/feedback/lesson_feedback/parent1'
+    );
+  });
+
+  it('should return early false if feedbackDetailResponse is null', () => {
+    component.feedbackDetailResponse = null;
+
+    expect(component.shouldShowStatusOption(FeedbackStatus.COMPLIMENT)).toBe(
+      false
+    );
+  });
+
+  it('should hide Compliment status option for Typo category', () => {
+    component.feedbackDetailResponse = {
+      ...mockPlatformFeedbackDetailResponse,
+      category: ReportAnIssueCategory.TYPO,
+    };
+
+    expect(component.shouldShowStatusOption(FeedbackStatus.COMPLIMENT)).toBe(
+      false
+    );
+  });
+
+  it('should show status option when condition is not met', () => {
+    component.feedbackDetailResponse = {
+      ...mockPlatformFeedbackDetailResponse,
+      category: ReportAnIssueCategory.OTHER_OR_NOT_SURE,
+    };
+
+    expect(component.shouldShowStatusOption(FeedbackStatus.COMPLIMENT)).toBe(
+      true
+    );
+  });
 });

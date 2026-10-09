@@ -40,7 +40,6 @@ import {ExplorationModeService} from 'pages/exploration-player-page/services/exp
 import {SiteAnalyticsService} from 'services/site-analytics.service';
 import {ConversationFlowService} from 'pages/exploration-player-page/services/conversation-flow.service';
 
-import './new-ratings-and-recommendations.component.css';
 import {
   MatBottomSheet,
   MatBottomSheetRef,
@@ -83,7 +82,7 @@ export class NewRatingsAndRecommendationsComponent
   @Input() userIsLoggedIn!: boolean;
   @Input() explorationIsInPreviewMode!: boolean;
   @Input() questionPlayerConfig!: QuestionPlayerConfig;
-  @Input() collectionSummary!: CollectionSummary;
+  @Input() collectionSummary!: CollectionSummary | string | null;
   @Input() recommendedExplorationSummaries!: LearnerExplorationSummary[];
 
   // The below property will be undefined when the current chapter

@@ -184,9 +184,8 @@ title: Title of exploration
 """
 )
 # Exploration migration backend tests with BEAM jobs involves creating and
-# publishing the exploration. This requires a ElasticSearch stub for running
-# while the backend tests run. JobTestBase does not initialize a
-# ElasticSearch stub, so MigrateExplorationJobTests also inherits from
+# publishing the exploration. JobTestBase does not initialize the necessary
+# services, so MigrateExplorationJobTests also inherits from
 # GenericTestBase to successfully emulate the exploration publishing and
 # verify the migration.
 
@@ -684,9 +683,8 @@ class MigrateExplorationJobTests(
 
 
 # Exploration migration backend tests with BEAM jobs involves creating and
-# publishing the exploration. This requires a ElasticSearch stub for running
-# while the backend tests run. JobTestBase does not initialize a
-# ElasticSearch stub, so MigrateExplorationJobTests also inherits from
+# publishing the exploration. JobTestBase does not initialize the necessary
+# services, so MigrateExplorationJobTests also inherits from
 # GenericTestBase to successfully emulate the exploration publishing and
 # verify the migration.
 class AuditExplorationMigrationJobTests(

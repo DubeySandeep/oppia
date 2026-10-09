@@ -37,7 +37,6 @@ import {
   TranslationKeyType,
 } from 'services/i18n-language-code.service';
 
-import './exploration-summary-tile.component.css';
 import {PlatformFeatureService} from 'services/platform-feature.service';
 
 @Component({
@@ -56,7 +55,7 @@ export class ExplorationSummaryTileComponent implements OnInit, OnDestroy {
   @Input() numViews!: number;
   @Input() objective!: string;
   @Input() category!: string;
-  @Input() ratings!: ExplorationRatings;
+  @Input() ratings!: ExplorationRatings | null;
   @Input() contributorsSummary!: HumanReadableContributorsSummary;
   @Input() thumbnailIconUrl!: string;
   @Input() thumbnailBgColor!: string;

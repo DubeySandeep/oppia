@@ -165,6 +165,14 @@ const historyListOptions = '.e2e-test-history-table-option';
 const downloadExplorationButton =
   'a.dropdown-item.e2e-test-download-exploration';
 
+const totalPlaysCardSelector = '.total-plays';
+const openFeedbackCardSelector = '.total-open-feedback';
+const subscriberCountLabel = '.e2e-test-oppia-total-subscribers';
+const explorationSummaryTileTitleSelector = '.e2e-test-exp-summary-tile-title';
+const explorationDashboardCardSelector = '.e2e-test-exploration-dashboard-card';
+const averageRatingsCardSelector = '.average-ratings';
+const usersCountInRatingSelector = '.e2e-test-oppia-total-users';
+
 // Common Selectors.
 const commonModalTitleSelector = '.e2e-test-modal-header';
 
@@ -209,6 +217,8 @@ export const INTERACTION_TABS_OF_INTERACTION_TYPE: Record<string, string> = {
   [INTERACTION_TYPES.CODE_EDITOR]: INTERACTION_TABS.PROGRAMMING,
   [INTERACTION_TYPES.FRACTION_INPUT]: INTERACTION_TABS.MATHS,
 } as const;
+
+const addTitleBar = 'input#explorationTitle';
 
 export class ExplorationEditor extends BaseUser {
   /**
@@ -403,10 +413,30 @@ export class ExplorationEditor extends BaseUser {
     await this.clickOnElementWithSelector(feedbackEditorSelector);
     await this.typeInInputField(stateContentInputField, feedback);
     await this.expectTextContentToBe(stateContentInputField, feedback);
-    // The '/' value is used to select the 'a new card called' option in the dropdown.
     if (destination) {
-      await this.select(destinationCardSelector, '/');
-      await this.typeInInputField(addStateInput, destination);
+      // Check if the destination card already exists in the dropdown options.
+      const hasExistingCard = await this.page.evaluate(
+        ({selector, cardName}: {selector: string; cardName: string}) => {
+          const selectElement = document.querySelector(
+            selector
+          ) as HTMLSelectElement | null;
+          if (!selectElement) {
+            return false;
+          }
+          return Array.from(selectElement.options).some(
+            option => option.value === cardName
+          );
+        },
+        {selector: destinationCardSelector, cardName: destination}
+      );
+
+      if (hasExistingCard) {
+        await this.select(destinationCardSelector, destination);
+      } else {
+        // The '/' value is used to select the 'a new card called' option in the dropdown.
+        await this.select(destinationCardSelector, '/');
+        await this.typeInInputField(addStateInput, destination);
+      }
     }
     if (responseIsCorrect) {
       await this.clickOnElementWithSelector(correctAnswerInTheGroupSelector);
@@ -1529,6 +1559,256 @@ export class ExplorationEditor extends BaseUser {
     }
 
     throw new Error(`Version ${explorationVersion} not found in history list.`);
+  }
+
+  /**
+   * Function to create and save a new untitled exploration containing
+   * only the EndExploration interaction.
+   */
+  async createAndSaveAMinimalExploration(): Promise<void> {
+    await this.navigateToCreatorDashboardPage();
+    await this.navigateToExplorationEditorFromCreatorDashboard();
+    await this.createMinimalExploration(
+      'Exploration intro text',
+      'End Exploration'
+    );
+    await this.saveExplorationDraft();
+  }
+
+  /**
+   * Function to check the expected total number of plays.
+   * @param {number} number - The expected total play count.
+   */
+  async expectTotalPlaysToBe(number: number): Promise<void> {
+    await this.expectElementToBeVisible(totalPlaysCardSelector);
+    const totalPlaysElements = await this.page.$$(
+      `${totalPlaysCardSelector} .stat-value-with-rating, ` +
+        `${totalPlaysCardSelector} .stat-value-without-rating`
+    );
+    let numberOfTotalPlays = 0;
+    for (const el of totalPlaysElements) {
+      const rect = await el.boundingBox();
+      if (!rect || rect.width === 0 || rect.height === 0) {
+        continue;
+      }
+      const text = await el.evaluate(
+        element => (element as HTMLElement).innerText.trim() || '0'
+      );
+      numberOfTotalPlays = parseInt(text, 10) || 0;
+      break;
+    }
+    if (numberOfTotalPlays !== number) {
+      throw new Error(
+        `Expected total plays count to be ${number}, but found ${numberOfTotalPlays}.`
+      );
+    }
+  }
+
+  /**
+   * Function to check the expected number of open feedback entries.
+   * @param {number} number - The expected count of open feedback entries.
+   */
+  async expectOpenFeedbacksToBe(number: number): Promise<void> {
+    await this.expectElementToBeVisible(openFeedbackCardSelector);
+    const numberOfOpenFeedbacks = await this.page.$eval(
+      openFeedbackCardSelector,
+      card => {
+        const statValue = Array.from(
+          (card as HTMLElement).querySelectorAll(
+            '.stat-value-with-rating, .stat-value-without-rating'
+          )
+        ).find(element => {
+          const htmlElement = element as HTMLElement;
+          const style = window.getComputedStyle(htmlElement);
+          const rect = htmlElement.getBoundingClientRect();
+          return (
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            rect.width > 0 &&
+            rect.height > 0
+          );
+        }) as HTMLElement | undefined;
+        return parseInt(statValue?.innerText.trim() || '0', 10);
+      }
+    );
+    if (numberOfOpenFeedbacks !== number) {
+      throw new Error(
+        `Expected open feedback count to be ${number}, but found ${numberOfOpenFeedbacks}.`
+      );
+    }
+  }
+
+  /**
+   * Function to check the number of subscribers in the creator dashboard.
+   * @param {number} subscriberCount - The expected number of subscribers.
+   */
+  async expectNumberOfSubscribersToBe(subscriberCount: number): Promise<void> {
+    await this.expectElementToBeVisible(subscriberCountLabel);
+    const currentSubscriberCount = await this.page.$eval(
+      subscriberCountLabel,
+      element => element.textContent?.trim() || '0'
+    );
+    if (parseInt(currentSubscriberCount, 10) === subscriberCount) {
+      showMessage(`Number of subscribers is equal to ${subscriberCount}.`);
+    } else {
+      throw new Error(
+        `Expected ${subscriberCount} subscribers, but found ${currentSubscriberCount}.`
+      );
+    }
+  }
+
+  /**
+   * Function to check the expected total number of explorations.
+   * @param {number} number - The expected count of total explorations.
+   */
+  async expectNumberOfExplorationsToBe(number: number): Promise<void> {
+    await this.expectElementToBeVisible(explorationSummaryTileTitleSelector);
+    const titlesOnPage = await this.page.$$eval(
+      explorationSummaryTileTitleSelector,
+      elements => elements.map(el => el.textContent?.trim() || '')
+    );
+    if (titlesOnPage.length !== number) {
+      throw new Error(
+        `Expected ${number} explorations, but found ${titlesOnPage.length} instead.`
+      );
+    }
+  }
+
+  /**
+   * Function to check the presence and expected number of occurrences
+   * of an exploration.
+   * @param {string} explorationName - The name of the exploration.
+   * @param {number} numberOfOccurrence - The expected occurrence count.
+   */
+  async expectExplorationNameToAppearNTimes(
+    explorationName: string,
+    numberOfOccurrence: number = 1
+  ): Promise<void> {
+    await this.expectElementToBeVisible(explorationSummaryTileTitleSelector);
+    const titlesOnPage = await this.page.$$eval(
+      explorationSummaryTileTitleSelector,
+      elements => elements.map(el => el.textContent?.trim() || '')
+    );
+    const count = titlesOnPage.filter(
+      title => title === explorationName
+    ).length;
+    if (numberOfOccurrence === 1 && count !== numberOfOccurrence) {
+      throw new Error(`Exploration "${explorationName}" not found.`);
+    } else if (count !== numberOfOccurrence) {
+      throw new Error(
+        `Exploration "${explorationName}" found ${count} times, ` +
+          `but expected ${numberOfOccurrence} times.`
+      );
+    }
+  }
+
+  /**
+   * Function to verify the average rating and the number of users who
+   * submitted ratings.
+   * @param {number | string} expectedRating - The expected average rating.
+   * @param {number} expectedUsers - The expected count of users who submitted
+   *   ratings.
+   */
+  async expectAverageRatingAndUsersToBe(
+    expectedRating: number | string,
+    expectedUsers: number
+  ): Promise<void> {
+    await this.expectElementToBeVisible(averageRatingsCardSelector);
+    const ratingElements = await this.page.$$(
+      `${averageRatingsCardSelector} .stat-value-with-rating, ` +
+        `${averageRatingsCardSelector} .stat-value-without-rating`
+    );
+    let ratingText = '';
+    for (const element of ratingElements) {
+      const rect = await element.boundingBox();
+      if (!rect || rect.width === 0 || rect.height === 0) {
+        continue;
+      }
+      ratingText = await element.evaluate(
+        el => (el as HTMLElement).innerText.trim() || ''
+      );
+      break;
+    }
+    // Handle "N/A" case.
+    if (expectedRating === 'N/A') {
+      if (ratingText !== 'N/A') {
+        throw new Error(
+          `Expected average rating to be "N/A", but found "${ratingText}".`
+        );
+      }
+    } else {
+      const ratingValue = parseFloat(ratingText);
+      if (ratingValue !== expectedRating) {
+        throw new Error(
+          `Expected average rating to be ${expectedRating}, ` +
+            `but found ${ratingValue}.`
+        );
+      }
+    }
+    const totalUsersText = await this.page.$eval(
+      usersCountInRatingSelector,
+      el => (el as HTMLElement).innerText.trim() || ''
+    );
+    // Extract number from text (e.g., "by 3 users" → 3).
+    const totalUsersMatch = totalUsersText.match(/\d+/);
+    const totalUsers = totalUsersMatch ? parseInt(totalUsersMatch[0], 10) : 0;
+    if (totalUsers !== expectedUsers) {
+      throw new Error(
+        `Expected ${expectedUsers} users to have submitted ratings, ` +
+          `but found ${totalUsers} instead.`
+      );
+    }
+  }
+
+  /**
+   * Opens the exploration editor for the exploration with the given name from the creator dashboard.
+   * @param {string} explorationName - The name of the exploration.
+   */
+  async openExplorationInExplorationEditor(
+    explorationName: string
+  ): Promise<void> {
+    await this.expectElementToBeVisible(explorationSummaryTileTitleSelector);
+    const title = await this.getTextContent(
+      explorationSummaryTileTitleSelector
+    );
+
+    if (title === explorationName) {
+      await this.clickOnElementWithSelector(explorationDashboardCardSelector);
+    } else {
+      throw new Error(`Exploration not found: ${explorationName}`);
+    }
+
+    await this.waitForNetworkIdle();
+    await this.waitForPageToFullyLoad();
+
+    await this.expectElementToBeVisible(
+      explorationSummaryTileTitleSelector,
+      false
+    );
+  }
+
+  /**
+   * Updates the exploration title in the settings tab.
+   * @param {string} title - The new title of the exploration.
+   */
+  async updateTitleTo(title: string): Promise<void> {
+    await this.expectElementToBeVisible(addTitleBar);
+    await this.clearAllTextFrom(addTitleBar);
+    await this.typeInInputField(addTitleBar, title);
+    await this.page.keyboard.press('Tab');
+
+    const newTitle = await this.page.$eval(addTitleBar, el =>
+      (el as HTMLInputElement).value?.trim()
+    );
+
+    // Compare first 36 characters of title.
+    if (newTitle !== title.slice(0, 36)) {
+      throw new Error(
+        `Failed to update title. Expected: ${title}, but got: ${newTitle}`
+      );
+    }
+
+    showMessage(`Title has been updated to ${newTitle}`);
   }
 }
 

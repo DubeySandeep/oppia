@@ -335,9 +335,7 @@ describe('Statistics Tab Component', () => {
     );
 
     spyOn(stateInteractionStatsService, 'computeStatsAsync').and.returnValue(
-      Promise.resolve({
-        visualizationsInfo: {},
-      } as StateInteractionStats)
+      Promise.resolve({} as StateInteractionStats)
     );
 
     spyOn(computeGraphService, 'compute').and.stub();
@@ -393,9 +391,7 @@ describe('Statistics Tab Component', () => {
 
       spyOn(ngbModal, 'open').and.returnValue({
         componentInstance: {
-          interactionArgs: '',
           stateName: 'stateName',
-          visualizationsInfo: '',
           stateStats: false,
         },
         result: Promise.resolve(),
@@ -415,9 +411,7 @@ describe('Statistics Tab Component', () => {
     fakeAsync(() => {
       spyOn(ngbModal, 'open').and.returnValue({
         componentInstance: {
-          interactionArgs: '',
           stateName: 'stateName',
-          visualizationsInfo: '',
           stateStats: false,
         },
         result: Promise.reject(),
